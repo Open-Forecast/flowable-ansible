@@ -1,0 +1,67 @@
+version: '3.3'
+services:
+  flowable-all:
+    image: flowable/all-in-one
+    container_name: flowable-all
+    depends_on:
+      - flowable-db
+    environment:
+      - SERVER_PORT=9977
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://flowable-db:5432/flowable
+      - SPRING_DATASOURCE_USERNAME=flowable
+      - SPRING_DATASOURCE_PASSWORD=flowable
+      - FLOWABLE_COMMON_APP_IDM-URL=http://flow.open-forecast.eu/flowable-idm
+      - FLOWABLE_COMMON_APP_IDM-REDIRECT-URL=http://flow.open-forecast.eu/flowable-idm
+      - FLOWABLE_COMMON_APP_IDM_ADMIN_USER=admin
+      - FLOWABLE_COMMON_APP_IDM_ADMIN_PASSWORD=***
+      - FLOWABLE_IDM_APP_ADMIN_USER_ID=admin
+      - FLOWABLE_IDM_APP_ADMIN_PASSWORD=***
+      - FLOWABLE_IDM_APP_ADMIN_FIRST_NAME=Flowable
+      - FLOWABLE_IDM_APP_ADMIN_LAST_NAME=Administrator
+      - FLOWABLE_IDM_APP_ADMIN_EMAIL=admin@admin
+
+    ports:
+      - 8080:8080
+    entrypoint: ["/wait-for-something.sh", "flowable-db", "5432", "PostgreSQL", "/opt/tomcat/bin/catalina.sh", "run"]
+
+  flowable-rest-app:
+    image: flowable/flowable-rest
+    container_name: flowable-rest
+    depends_on:
+      - flowable-db
+    environment:
+      - SERVER_PORT=9999
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://flowable-db:5432/flowable
+      - SPRING_DATASOURCE_USERNAME=flowable
+      - SPRING_DATASOURCE_PASSWORD=flowable
+      - FLOWABLE_REST_APP_ADMIN_USER-ID=rest-admin
+      - FLOWABLE_REST_APP_ADMIN_PASSWORD=test
+      - FLOWABLE_REST_APP_ADMIN_FIRST-NAME=Rest
+      - FLOWABLE_REST_APP_ADMIN_LAST-NAME=Admin
+    ports:
+      - 9999:9999
+    entrypoint: ["./wait-for-something.sh", "flowable-db", "5432", "PostgreSQL", "java", "-jar", "app.war"]
+
+  flowable-db:
+    image: postgres:12.3-alpine
+    container_name: flowable-postgres
+    environment:
+      - POSTGRES_PASSWORD=flowable
+      - POSTGRES_USER=flowable
+      - POSTGRES_DB=flowable
+    ports:
+      - 5433:5432
+    volumes:
+      - all-in-one_pgdata:/var/lib/postgresql/data
+    command: postgres
+
+  am-automation-api:
+    image: docker.gitlab.gwdg.de/archiver/archivematica-automation-api:v2
+    container_name: am-automation-api
+    ports:
+      - 5000:80
+
+volumes:
+  all-in-one_pgdata:

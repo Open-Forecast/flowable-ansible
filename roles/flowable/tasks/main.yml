@@ -1,0 +1,56 @@
+# Run copy file and run docker compose
+#
+- name: install python3
+  apt:
+    name: python3
+    state: present
+  become: yes
+
+- name: install pip
+  apt:
+    name: python3-pip
+    state: present
+  become: yes
+
+- name: install python libraries
+  pip:
+    name: "{{ item }}"
+    executable: pip3
+  become: yes
+  with_items:
+    - "docker-compose"
+
+- name: Copy docker-compose.yml
+  copy:
+    src: "{{ compose_file_path }}"
+    dest: "{{ dest_compose_file_path }}"
+  become: yes
+
+- name: run docker compose
+  docker_compose:
+    state: present
+    build: True
+    project_src: "{{ dest_compose_file_path }}"
+    project_name: "flowable_openforecast"
+    files: "docker-compose.yml"
+  become: yes
+#
+# Copy and install nginx configuration
+#
+- name: add nginx configuration
+  copy:
+    src: roles/flowable/files/flow_nginx.conf
+    dest: /etc/nginx/sites-enabled
+  become: yes
+
+- name: remove nginx default configuration
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  become: yes
+
+- name: reload nginx
+  command: 
+    cmd: nginx -s reload
+  become: yes
+
