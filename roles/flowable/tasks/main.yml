@@ -25,6 +25,7 @@
     src: "{{ compose_file_path }}"
     dest: "{{ dest_compose_file_path }}"
   become: yes
+  register: compose_config
 
 - name: run docker compose
   docker_compose:
@@ -34,6 +35,8 @@
     project_name: "flowable_openforecast"
     files: "docker-compose.yml"
   become: yes
+  when: compose_config.changed
+
 #
 # Copy and install nginx configuration
 #
@@ -48,9 +51,10 @@
     path: /etc/nginx/sites-enabled/default
     state: absent
   become: yes
+  register: nginx_config
 
 - name: reload nginx
-  command: 
+  command:
     cmd: nginx -s reload
   become: yes
-
+  when: nginx_config.changed
