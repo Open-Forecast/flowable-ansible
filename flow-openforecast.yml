@@ -1,0 +1,16 @@
+# Setup flowable Server for the Open Forecast Project
+#
+# 20200724/sven.bingert
+# 
+# all the necesary configuration can be found in
+#   - roles/flowable/files/docker-compose.yml
+#   - roles/flowable/files/flow-nginx.conf
+
+- hosts: flow.open-forecast.eu
+  roles:
+    - nginx
+    - docker
+    - flowable
+  vars:
+    compose_file_path: "roles/flowable/files/docker-compose.yml"
+    dest_compose_file_path: "/home/cloud"
