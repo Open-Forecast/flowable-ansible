@@ -1,0 +1,6 @@
+- name: Install nginx as webserver
+  apt:
+    name: nginx
+    state: latest
+  become: yes
+  tags: nginx
