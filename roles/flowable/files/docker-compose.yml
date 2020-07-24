@@ -20,7 +20,11 @@ services:
       - FLOWABLE_IDM_APP_ADMIN_FIRST_NAME=Flowable
       - FLOWABLE_IDM_APP_ADMIN_LAST_NAME=Administrator
       - FLOWABLE_IDM_APP_ADMIN_EMAIL=admin@admin
-
+      - FLOWABLE_MAIL_SERVER_HOST=mailer.domain
+      - FLOWABLE_MAIL_SERVER_PORT=25
+      - FLOWABLE_MAIL_SERVER_USERNAME=mail@mail
+      - FLOWABLE_MAIL_SERVER_PASSWORD=***
+      - FLOWABLE_MAIL_SERVER_USE-TLS=true
     ports:
       - 8080:8080
     entrypoint: ["/wait-for-something.sh", "flowable-db", "5432", "PostgreSQL", "/opt/tomcat/bin/catalina.sh", "run"]
