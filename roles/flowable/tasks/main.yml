@@ -40,6 +40,20 @@
 #
 # Copy and install nginx configuration
 #
+- name: create folder for the certs
+  file:
+    path: /root/cert
+    state: directory
+  become: yes
+
+- name: copy certifcate file
+  copy:
+    src: "{{ item }}"
+    dest: /root/cert/
+  with_items: ["roles/flowable/files/cert.pem","roles/flowable/files/key.pem"]
+  register: nginx_cert
+  become: yes
+
 - name: add nginx configuration
   copy:
     src: roles/flowable/files/flow_nginx.conf

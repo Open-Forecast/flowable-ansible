@@ -2,3 +2,5 @@
 *.*~
 .DS_Store
 *.*_bak
+roles/flowable/files/cert.pem
+roles/flowable/files/key.pem
