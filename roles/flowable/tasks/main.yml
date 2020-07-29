@@ -71,4 +71,5 @@
   command:
     cmd: nginx -s reload
   become: yes
-  when: nginx_config.changed
+  when: nginx_config.changed or nginx_cert.changed
+
