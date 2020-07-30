@@ -11,6 +11,8 @@
     - nginx
     - docker
     - flowable
+    - nagios
   vars:
     compose_file_path: "roles/flowable/files/docker-compose.yml"
     dest_compose_file_path: "/home/cloud"
+    itcockpit_server: "ip_of_your_itcockpit_server"
