@@ -6,19 +6,23 @@
     state: present
   become: yes
 
+- name: install setuptools
+  apt:
+    name: python3-setuptools
+    state: present
+  become: yes
+
 - name: install pip
   apt:
     name: python3-pip
     state: present
   become: yes
 
-- name: install python libraries
+- name: install docker-compose
   pip:
-    name: "{{ item }}"
+    name: docker-compose
     executable: pip3
   become: yes
-  with_items:
-    - "docker-compose"
 
 - name: Copy docker-compose.yml
   copy:
@@ -59,17 +63,16 @@
     src: roles/flowable/files/flow_nginx.conf
     dest: /etc/nginx/sites-enabled
   become: yes
+  register: nginx_config
 
 - name: remove nginx default configuration
   file:
     path: /etc/nginx/sites-enabled/default
     state: absent
   become: yes
-  register: nginx_config
 
 - name: reload nginx
   command:
     cmd: nginx -s reload
   become: yes
   when: nginx_config.changed or nginx_cert.changed
-
