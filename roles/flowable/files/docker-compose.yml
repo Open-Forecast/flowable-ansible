@@ -11,8 +11,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://flowable-db:5432/flowable
       - SPRING_DATASOURCE_USERNAME=flowable
       - SPRING_DATASOURCE_PASSWORD=flowable
-      - FLOWABLE_COMMON_APP_IDM-URL=http://flow.open-forecast.eu/flowable-idm
-      - FLOWABLE_COMMON_APP_IDM-REDIRECT-URL=http://flow.open-forecast.eu/flowable-idm
+      - FLOWABLE_COMMON_APP_IDM-URL=https://flow.open-forecast.eu/flowable-idm
+      - FLOWABLE_COMMON_APP_IDM-REDIRECT-URL=https://flow.open-forecast.eu/flowable-idm
       - FLOWABLE_COMMON_APP_IDM_ADMIN_USER=admin
       - FLOWABLE_COMMON_APP_IDM_ADMIN_PASSWORD=***
       - FLOWABLE_IDM_APP_ADMIN_USER_ID=admin
